@@ -445,7 +445,7 @@ where
     auth_url: AuthUrl,
     auth_type: AuthType,
     token_url: Option<TokenUrl>,
-    redirect_url: Option<RedirectUrl>,
+    redirect_url: Option<String>,
     phantom_te: PhantomData<TE>,
     phantom_tr: PhantomData<TR>,
     phantom_tt: PhantomData<TT>,
@@ -512,7 +512,7 @@ where
     ///
     /// Sets the the redirect URL used by the authorization endpoint.
     ///
-    pub fn set_redirect_url(mut self, redirect_url: RedirectUrl) -> Self {
+    pub fn set_redirect_url(mut self, redirect_url: String) -> Self {
         self.redirect_url = Some(redirect_url);
 
         self
@@ -651,7 +651,7 @@ pub struct AuthorizationRequest<'a> {
     client_id: &'a ClientId,
     extra_params: Vec<(Cow<'a, str>, Cow<'a, str>)>,
     pkce_challenge: Option<PkceCodeChallenge>,
-    redirect_url: Option<Cow<'a, RedirectUrl>>,
+    redirect_url: Option<Cow<'a, String>>,
     response_type: Cow<'a, str>,
     scopes: Vec<Cow<'a, Scope>>,
     state: CsrfToken,
@@ -721,7 +721,7 @@ impl<'a> AuthorizationRequest<'a> {
     ///
     /// Overrides the `redirect_url` to the one specified.
     ///
-    pub fn set_redirect_url(mut self, redirect_url: Cow<'a, RedirectUrl>) -> Self {
+    pub fn set_redirect_url(mut self, redirect_url: Cow<'a, String>) -> Self {
         self.redirect_url = Some(redirect_url);
         self
     }
@@ -821,7 +821,7 @@ where
     extra_params: Vec<(Cow<'a, str>, Cow<'a, str>)>,
     pkce_verifier: Option<PkceCodeVerifier>,
     token_url: Option<&'a TokenUrl>,
-    redirect_url: Option<&'a RedirectUrl>,
+    redirect_url: Option<&'a String>,
     _phantom: PhantomData<(TE, TR, TT)>,
 }
 impl<'a, TE, TR, TT> CodeTokenRequest<'a, TE, TR, TT>
@@ -1263,7 +1263,7 @@ fn token_request<'a>(
     client_id: &'a ClientId,
     client_secret: Option<&'a ClientSecret>,
     extra_params: &'a [(Cow<'a, str>, Cow<'a, str>)],
-    redirect_url: Option<&'a RedirectUrl>,
+    redirect_url: Option<&'a String>,
     scopes: Option<&'a Vec<Cow<'a, Scope>>>,
     token_url: &'a TokenUrl,
     params: Vec<(&'a str, &'a str)>,
